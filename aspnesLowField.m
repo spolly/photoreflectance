@@ -1,7 +1,7 @@
 function y=aspnesLowField(E,Eg,gamma,hO,theta,m,A)
 % aspnesLowField returns the low-field deltaR/R signal based on the 
 % following inputs:
-%     E: Energy [J] {vector expected
+%     E: Energy [J] {vector expected}
 %    Eg: Bandgap Energy [J] {scalar expected}
 % gamma: Broadning factor [J] {scalar expected}
 %    hO: Electro-optical energy [J] {scalar expected}
