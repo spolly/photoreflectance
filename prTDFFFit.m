@@ -1,5 +1,26 @@
 function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
-    
+% prTDFFFit returns a fit and a gof against the input x and y data, using 
+% the sum of n oscillators defined by prTDFF.
+%   Inputs:
+%       x: x-values of experimental data (energy) [eV] {vector expected}
+%       y: y-values of experimental data (deltaR/R) [unitless] 
+%           {vector expected}
+%       initial: Estimates of oscillator energy [eV]
+%                   {scalar or vector expected}
+%   Optional Inputs:
+%       'couplePhase': 'false': (default) allows independent phase term  
+%                               fits for each  oscillator. 
+%                      'true': locks all phase terms as one parameter.
+%       'fixM': 'true': (default) locks the exponent 'm' as 2.5, typical 
+%                       for a three dimentional critical point.
+%               'false': allows independent 'm' term for each oscillator.
+%   Outputs:
+%       myFit: MATLAB fit output [various] {cfit}
+%       upper: MATLAB goodness of fit output [various] {struct}
+% 
+%  Copyright 2014 Stephen J. Polly, RIT
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License v3.    
     p = inputParser;
     addOptional(p,'couplePhase','false');
     addOptional(p,'fixM','true');
