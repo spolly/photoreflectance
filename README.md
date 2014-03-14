@@ -23,7 +23,7 @@ How to use these scripts
 To produce an example photoreflectance deltaR/R plot for, e.g. GaAs:
 First create a vector of energies to plot over, here 1.3 to 1.5 eV in steps of 1 meV:
 
-E=1.3:0.001:1.5;
+>E=1.3:0.001:1.5;
 
 Then calculate the corrisponding PR signal with a call to `prTDFF.m`. In this example:
 Eg = 1.42 eV
@@ -33,8 +33,11 @@ theta = 0
 m = 2.5
 A = 1e-4
 
-PR=prTDFF(E,1.42,0.01,0.001,0,2.5,1e-4);
-plot(E, prTDFF(E,1.42,0.01,0.001,0,2.5,1e-4));
+>PR=prTDFF(E,1.42,0.01,0.001,0,2.5,1e-4);
+
+Which is then plotted:
+
+>plot(E, prTDFF(E,1.42,0.01,0.001,0,2.5,1e-4));
 
 Please see the comments at the top of `prTDFF.m` for more information.
 
@@ -42,11 +45,11 @@ To fit data against (n) oscillators:
 Import experimental data to MATLAB. In this example, x-data is 'E' and y-data is 'PR'.
 Make a vector of educated guesses of where the oscillators lie:
 
-initial=[1.42, 1.5];
+>initial=[1.42, 1.5];
 
 Make a call to `prTDFFFit.m` using the experimental data and the guess vector. Here we set testFit and testGOF to the fit output and goodness of fit output, respectively:
 
-[testFit, testGOF]= prTDFFFit(E,PR,initial);
+>[testFit, testGOF]= prTDFFFit(E,PR,initial);
 
 This function accepts additional inputs (default is listed first):
 'fixM': 'true' or 'false'. This fixes the m-exponent to 2.5 (true) or sets it as a floating fitting parameter (false).
