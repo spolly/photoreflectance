@@ -14,7 +14,7 @@ Function Files
 
 * `prTDFF.m` Calculates photoreflectance spectra for a given set of inputs.
 * `prTDFFFit.m` Performs a fit of (n) oscillators against input data.
-* `prTDFFFitSetup.m` Sets starting conditions, as well as upper and lower bounds for the fit performed by prTDFFFit.m.
+* `prTDFFFitSetup.m` Sets starting conditions, as well as upper and lower bounds for the fit performed by `prTDFFFit.m`.
 * `prTDFFn.m` Defines a fittype string and vector of coefficients necessairy to fit (n) oscillators with.
 
 How to use these scripts
@@ -38,7 +38,7 @@ Then calculate the corrisponding PR signal with a call to `prTDFF.m`. In this ex
 
 Which is then plotted:
 
->plot(E, prTDFF(E, 1.42, 0.01, 0.001, 0, 2.5, 1e-4));
+>plot(E, PR);
 
 Please see the comments at the top of `prTDFF.m` for more information.
 
