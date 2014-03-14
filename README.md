@@ -28,7 +28,7 @@ First create a vector of energies to plot over, here 1.3 to 1.5 eV in steps of 1
 
 Then calculate the corrisponding PR signal with a call to `prTDFF.m`. In this example:
 * Eg = 1.42 eV
-* gamma = 0.01 eV,
+* gamma = 0.01 eV
 * hO = 0.001 eV
 * theta = 0
 * m = 2.5
@@ -54,7 +54,7 @@ Make a call to `prTDFFFit.m` using the experimental data and the guess vector. H
 
 This function accepts additional inputs (default is listed first):
 * 'fixM': 'true' or 'false'. This fixes the m-exponent to 2.5 (true) or sets it as a floating fitting parameter (false).
-* 'couplePhase', 'false', 'true'. This allows each oscillator to have a separate phase term, or couples all oscillators to one phase paramter.
+* 'couplePhase': 'false' or 'true'. This allows each oscillator to have a separate phase term, or couples all oscillators to one phase paramter.
 * 'plotFitOnly': 'false' or 'true'. Plots the resulting fit against the data (true) or checks against 'plotAll'.
 * 'plotAll': 'true' or 'false': Plots the fit as well as the component functions (true) or does not plot anything (false).
 
