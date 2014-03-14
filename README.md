@@ -22,7 +22,7 @@ How to use these scripts
 
 To produce an example photoreflectance deltaR/R plot for, e.g. GaAs:
 First create a vector of energies to plot over, here 1.3 to 1.5 eV in steps of 1 meV:
->> E=1.3:0.001:1.5;
+>> E=1.3:0.001:1.5;>>
 Then calculate the corrisponding PR signal with a call to `prTDFF.m`. In this example:
 Eg = 1.42 eV
 gamma = 0.01 eV,
