@@ -48,7 +48,7 @@ Make a vector of educated guesses of where the oscillators lie:
 
 >initial = [1.42, 1.5];
 
-Make a call to `prTDFFFit.m` using the experimental data and the guess vector. Here we set testFit and testGOF to the fit output and goodness of fit output, respectively:
+Make a call to `prTDFFFit.m` using the experimental data and the guess vector. Here we set testFit and testGOF to the fit output and goodness of fit output, respectively. Since the vector 'initial' has 2 values, a 2-oscillator fit will be used.
 
 >[testFit, testGOF] = prTDFFFit(E, PR, initial);
 
