@@ -33,7 +33,8 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
         gammax=strcat('gamma',nx);
         %The Coefficient vector is built differently depending on what 
         %(from phase and m terms) are fixed. If phase is fixed, theta1 is 
-        %the only phase parameter, which is used in each function call. If 
+        %the only phase parameter, which is used in each function call. 
+        %Otherwise they are enumerated as the rest of the parameters. If 
         %m is fixed, it is simply set to 2.5 and not included as a 
         %parameter at all.
         if strcmp(p.Results.fixM, 'true')

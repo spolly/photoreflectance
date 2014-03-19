@@ -2,7 +2,7 @@ function f=prTDFF(x,Eg,gamma,hO,theta,m,A)
 % prTDFF returns the calculated low-field deltaR/R based on several inputs.
 %   Inputs:
 %        x: Energy [eV] {vector expected}
-%       Eg: Bandgap Energy [eV] {scalar expected}
+%       Eg: Oscillator energy [eV] {scalar expected}
 %    gamma: Broadning factor [eV] {scalar expected}
 %       hO: Electro-optical energy [eV] {scalar expected}
 %    theta: Phase term [radians] {scalar expected}
@@ -10,7 +10,7 @@ function f=prTDFF(x,Eg,gamma,hO,theta,m,A)
 %            {scalar expected}
 %        A: Amplitude factor [unitless] {scalar expected}
 %   Outputs:
-%       f: delR/R [proportinal to eV^3] {vector}
+%        f: delR/R [proportinal to eV^3] {vector}
 %
 %   If all values in [eV] are replaced with [J], the function is still
 %   valid, though that may only hold for this file and not the overall 

@@ -16,7 +16,7 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
 %               'false': allows independent 'm' term for each oscillator.
 %   Outputs:
 %       myFit: MATLAB fit output [various] {cfit}
-%       upper: MATLAB goodness of fit output [various] {struct}
+%       myGof: MATLAB goodness of fit output [various] {struct}
 % 
 %  Copyright 2014 Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify

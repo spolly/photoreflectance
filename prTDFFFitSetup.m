@@ -56,7 +56,7 @@ function [start, upper, lower]=prTDFFFitSetup(x,initial,varargin)
     start=[];
     upper=[];
     lower=[];
-    %       f=prTDFF(x,Eg,gamma,hO,theta,m,A)
+
     for i=1:n
         %First check to make sure the generatated bounds on the guesses of
         %energy are inside the data, if not set to just inside the data
