@@ -1,6 +1,6 @@
 function [start, upper, lower] = prMultiFitSetup(x,initial,myCoeff,...
                                     varargin)
-% prFDFFFitSetup returns vectors describing initial conditions, as well as 
+% prMultiFitSetup returns vectors describing initial conditions, as well as 
 % upper and lower bounds for the fitting function.
 %   Inputs:
 %       x: x-values of experimental data [eV] {vector expected}
