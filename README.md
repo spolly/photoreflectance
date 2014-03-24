@@ -191,7 +191,7 @@ type = [1, 1, 1, 1, 3];
 
 In this example, the first 4 oscillators will use the FDFF by setting the 'type(1:4)' to 1, while the fifth oscillator will use the TDFF by setting 'type(5)' to 3.
 
-Make a call to `prMultiFit.m` using the experimental data and the 'initial' vector. Here we set testFit and testGOF to the fit output and goodness of fit output, respectively. Since the vector 'initial' has 2 values, a 2-oscillator fit will be created and used.
+Make a call to `prMultiFit.m` using the experimental data and the 'initial' vector. Here we set testFit and testGOF to the fit output and goodness of fit output, respectively. Since the vector 'initial' has 5 values, a 5-oscillator fit will be created and used.
 
 ```matlab
 [testFit, testGOF] = prMultiFit(E, PR, initial, type);
