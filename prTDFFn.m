@@ -21,16 +21,26 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
     p = inputParser;
     addOptional(p,'couplePhase','false');
     addOptional(p,'fixM','true');
+    addOptional(p,'iteration',0);
     parse(p,varargin{:});
     
     myEq='';
     myCoeff={};
+    if p.Results.iteration > 0 && n > 1
+        err = MException('n:OutOfRange', ...
+            'If ''iteration'' is specified, n must equal 1');
+        throw(err)
+    end
     for i=1:n
-        nx=num2str(i);
-        hOx=strcat('hO',nx);
-        Ax=strcat('A',nx);
-        Egx=strcat('Eg',nx);
-        gammax=strcat('gamma',nx);
+        if p.Results.iteration == 0
+            nx=num2str(i,'%02d');
+        else
+            nx=num2str(p.Results.iteration,'%02d');
+        end
+        hOTx=strcat('hOT',nx);
+        ATx=strcat('AT',nx);
+        EnTx=strcat('EnT',nx);
+        gammaTx=strcat('gammaT',nx);
         %The Coefficient vector is built differently depending on what 
         %(from phase and m terms) are fixed. If phase is fixed, theta1 is 
         %the only phase parameter, which is used in each function call. 
@@ -38,32 +48,40 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
         %m is fixed, it is simply set to 2.5 and not included as a 
         %parameter at all.
         if strcmp(p.Results.fixM, 'true')
-            mx='2.5';
-            if strcmp(p.Results.couplePhase, 'true') && i > 1
-              thetax=strcat('theta','1');
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, Ax});
-            elseif strcmp(p.Results.couplePhase, 'true')
-              thetax=strcat('theta','1');
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, thetax, Ax});
-            else
-              thetax=strcat('theta',nx);
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, thetax, Ax});
+            mTx='2.5';
+             if strcmp(p.Results.couplePhase, 'true') && (i > 1 ... 
+                || (p.Results.iteration > 1))
+                thetaTx='thetaT00';
+                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, ATx});
+             else
+                if strcmp(p.Results.couplePhase, 'true')...
+                    && (p.Results.iteration <= 1)
+                    thetaTx='thetaT00';
+                else
+                    thetaTx=strcat('thetaT',nx);
+                end
+                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, thetaTx,...
+                    ATx});
             end
         else
-            mx=strcat('m',nx);
-            if strcmp(p.Results.couplePhase, 'true') && i > 1
-              thetax=strcat('theta','1');
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, mx, Ax});
-            elseif strcmp(p.Results.couplePhase, 'true')
-              thetax=strcat('theta','1');
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, thetax, mx, Ax});
+            mTx=strcat('mT',nx);
+            if strcmp(p.Results.couplePhase, 'true') && (i > 1 ... 
+                || (p.Results.iteration > 1))
+              thetaTx='thetaT00';
+              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, mTx, ATx});
             else
-              thetax=strcat('theta',nx);
-              myCoeff=horzcat(myCoeff, {Egx, gammax, hOx, thetax, mx, Ax});
+                if strcmp(p.Results.couplePhase, 'true')...
+                    && (p.Results.iteration <= 1)
+                    thetaTx='thetaT00';
+                else
+                    thetaTx=strcat('thetaT',nx);
+                end
+              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, thetaTx,...
+                  mTx, ATx});
             end
         end
-        myEq=strcat(myEq, 'prTDFF(x,', Egx, ',', gammax, ',', hOx, ',',...
-            thetax, ',', mx, ',', Ax, ') +'); 
+        myEq=strcat(myEq, 'prTDFF(x,', EnTx, ',', gammaTx, ',', hOTx,...
+            ',', thetaTx, ',', mTx, ',', ATx, ') +'); 
     end
     %remove trailing ' +'
     myEq=myEq(1:end-2); 

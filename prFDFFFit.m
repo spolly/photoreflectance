@@ -12,8 +12,8 @@ function [myFit,myGof]=prFDFFFit(x,y,initial,varargin)
 %                               fits for each  oscillator. 
 %                      'true': locks all phase terms as one parameter.
 %   Outputs:
-%       myFit: MATLAB fit output [various] {cfit}
-%       myGof: MATLAB goodness of fit output [various] {struct}
+%       myFit: MATLAB fit [various] {cfit}
+%       myGof: MATLAB goodness of fit [various] {struct}
 %
 %  This was written in MATLAB R2013a, and requires the free/open-source 
 %  C++ version of erfi(): Faddeeva_erfi(), written by S. G. Johnson, which 
@@ -37,8 +37,8 @@ function [myFit,myGof]=prFDFFFit(x,y,initial,varargin)
     myFitType=fittype(myEq, 'dependent',{'y'},'independent',{'x'},...
     'coefficients', myCoeff);
 
-    [start,upper,lower]=prFDFFFitSetup(x,initial, 'couplePhase',...
-        p.Results.couplePhase);
+    [start,upper,lower]=prFDFFFitSetup(x,initial, myCoeff,...
+        'couplePhase', p.Results.couplePhase);
 
     [myFit,myGof]=fit(x,y,myFitType,'StartPoint', start, 'Upper', upper,...
         'Lower', lower, 'MaxFunEvals', 5000, 'MaxIter', 5000,...
@@ -52,31 +52,36 @@ function [myFit,myGof]=prFDFFFit(x,y,initial,varargin)
         myPlot=plot(myFit,'k',x,y);
         set(myPlot,'LineWidth', 3);
         fitCoeff=coeffvalues(myFit);
+        fitCoeffNames=coeffnames(myFit);
+        F_iter=1;
+        myFDFF=zeros(length(x), n);
         for j=1:n
-            if strcmp(p.Results.couplePhase, 'true')
-                thetaj(j)=fitCoeff(3);
-                if j == 1
-                    Enj(j)=fitCoeff(1);
-                    gammaj(j)=fitCoeff(2);
-                    Cj(j)=fitCoeff(4);
-                else
-                    offset=4+(j-2)*3;
-                    Enj(j)=fitCoeff(offset+1);
-                    gammaj(j)=fitCoeff(offset+2);
-                    Cj(j)=fitCoeff(offset+3);
-                end
-            else
-                offset=(j-1)*4;
-                Enj(j)=fitCoeff(offset+1);
-                gammaj(j)=fitCoeff(offset+2);
-                thetaj(j)=fitCoeff(offset+3);
-                Cj(j)=fitCoeff(offset+4);
-            end
-                %y=prFDFF(E,En,gamma,theta,C)
-            myTDFF(:,j)=prFDFF(x, Enj(j), gammaj(j), thetaj(j),Cj(j));
-        end
-        hold on
-        plot(x,myTDFF, 'linewidth', 1);
-        hold off
+             %f=prFDFF(E,En,gamma,theta,A)
+             myName=strcat('EnF',num2str(F_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myEnF=fitCoeff(boolIndex);
+
+             myName=strcat('gammaF',num2str(F_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myGammaF=fitCoeff(boolIndex);
+
+             if strcmp(p.Results.couplePhase, 'true')
+                 myName='thetaF00';
+             else
+                 myName=strcat('thetaF',num2str(F_iter,'%02d'));
+             end
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myThetaF=fitCoeff(boolIndex);
+
+             myName=strcat('AF',num2str(F_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myAF=fitCoeff(boolIndex);
+
+             myFDFF(:,F_iter)=prFDFF(x, myEnF, myGammaF, myThetaF, myAF);
+             F_iter = F_iter + 1;
+         end
+         hold on
+         plot(x,myFDFF, 'linewidth', 1);
+         hold off
     end
 end

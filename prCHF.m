@@ -1,11 +1,11 @@
 function f=prCHF(x)
-% prCHF computes psi(1, 1/2, -y^2/2), where psi is the confluent 
+% prCHF computes psi(1, 1/2, -x^2/2), where psi is the confluent 
 %hypergeometric function. This precise function definition is difficult to
 %calculate in MATLAB without invoking the symbolic toolbox, which
 %considerably increases computation time (~4 orders of magnitude larger 
 %than this method). An alternative form was determined with WolframAlpha by
 %searching for: 
-%       "confluent hypergeometric function (1, 1/2, -y^2/2)"
+%       "confluent hypergeometric function (1, 1/2, -x^2/2)"
 %The alternate form makes use of the imaginary error function. While not 
 %included in MATLAB (without also invoking the symbolic toolbox), a 
 %free/open-source C++ version of erfi() was written by S. G. Johnson, and 
@@ -13,7 +13,7 @@ function f=prCHF(x)
 %http://ab-initio.mit.edu/Faddeeva 
 %Instructions for compiling it in MATLAB can also be found there.
 %
-%This particular function, psi(1, 1/2, -y^2/2), was taken from equation 3d 
+%This particular function, psi(1, 1/2, -x^2/2), was taken from equation 3d 
 %of [1].
 %
 % [1]Y. S. Huang, H. Qiang, F. H. Pollak, J. Lee, and B. Elman, 
@@ -26,7 +26,7 @@ function f=prCHF(x)
 %  it under the terms of the GNU General Public License v3.
 
     %prCHF(x) would return NaN or InF if x < -37, x > 37, or x = 0 due to 
-    %Faddeeva_erfi(x/sqrt(2)) returning Inf. The modification to y here
+    %Faddeeva_erfi(x/sqrt(2)) returning Inf. The modification to x here
     %prevents this from happening, and is of negligible consequence to the
     %functional form. For 0 < x <= 1e-13, Faddeeva_erfi(x) produces a 
     %result equal to or less than its nominal tolerance for  
@@ -44,17 +44,17 @@ function f=prCHF(x)
 
     %The symbolic toolbox code is included here for reference, but as
     %mentioned it takes ~1e4 times as long to run.
-    %     % prCHF computes psi(1, 1/2, -y^2/2), the confluent   
+    %     % prCHF computes psi(1, 1/2, -x^2/2), the confluent   
     %     % hypergeometric function. This function is difficult in MATLAB, 
     %     % using the form psi=e^(-y^2/2) * exponential integral of 
     %     % (n, -y^2/2) where n = 3/2 computed as an alternative form from 
     %     % WolframAlpha call of:
-    %     %     "confluent hypergeometric function (1, 1/2, -y^2/2)"
-    %     y(y<-37)=-37;
-    %     y(y>37)=37;
-    %     y(y==0)=1e-13;
-    %     yS=sym(y);
-    %     a1=exp(-(y.^2./2));
-    %     a2=double(expint(3/2,-(yS.^2)/2));
+    %     %     "confluent hypergeometric function (1, 1/2, -x^2/2)"
+    %     x(x<-37)=-37;
+    %     x(x>37)=37;
+    %     x(x==0)=1e-13;
+    %     xS=sym(x);
+    %     a1=exp(-(x.^2./2));
+    %     a2=double(expint(3/2,-(xS.^2)/2));
     %     f=real(a1.*a2);
 end

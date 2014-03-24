@@ -1,9 +1,12 @@
-function [start, upper, lower]=prFDFFFitSetup(x,initial,varargin)
+function [start, upper, lower]=prFDFFFitSetup(x,initial,myCoeff,varargin)
 % prFDFFFitSetup returns vectors describing initial conditions, as well as 
 % upper and lower bounds for the fitting function.
 %   Inputs:
 %       x: x-values of experimental data [eV] {vector expected}
-%       n: Number of oscillators to use [unitless] {scalar expected}
+%       initial: Estimates of oscillator energy [eV]
+%                   {scalar or vector expected}
+%       myCoeff: Names of coefficients used in the equation, as output by
+%                   prFDFFn.m
 %   Optional Inputs:
 %       'couplePhase': 'false': (default) allows independent phase term  
 %                               fits for each  oscillator. 
@@ -22,58 +25,64 @@ function [start, upper, lower]=prFDFFFitSetup(x,initial,varargin)
     addOptional(p,'fixM','true');
     parse(p,varargin{:});
 
-    n=length(initial);
-
-
     erange=0.15;        %Value erange determines percentage change allowed    
-    Eplus=1+erange;     %via bounds for energy. E.g. 0.15 means 15% higher   
-    Eminus=1-erange;    %or lower than the input guess.
-    Emax=max(x)*0.999;
-    Emin=min(x)*1.001;
+    EnFplus=1+erange;     %via bounds for energy. E.g. 0.15 means 15% higher   
+    EnFminus=1-erange;    %or lower than the input guess.
+    EnFmax=max(x)*0.999;
+    EnFmin=min(x)*1.001;
 
-    gammastart=0.01;
-    gammaup=1;
-    gammalow=0.0001;
+    gammaFstart=5e-3;
+    gammaFup=5e-1;
+    gammaFlow=1e-4;
 
-    thetastart=0;
-    thetaup=2*pi;
-    thetalow=-2*pi;
+    thetaFstart=0;
+    thetaFup=2*pi;
+    thetaFlow=-2*pi;
 
-    Cstart=0.001;
-    Cup=.01;
-    Clow=.0000001;
+    AFstart=1e-3;
+    AFup=1e-2;
+    AFlow=1e-7;
 
-    start=[];
-    upper=[];
-    lower=[];
+    cLength=length(myCoeff);
+    start(cLength)=zeros;
+    upper(cLength)=zeros;
+    lower(cLength)=zeros;
+    
+    initialIndex = 1;
 
-    for i=1:n
-        %First check to make sure the generatated bounds on the guesses of
-        %energy are inside the data, if not set to just inside the data
-        %range.
-        if initial(i)*Eplus > Emax
-            Eup=Emax;
-        else
-            Eup=initial(i)*Eplus;
-        end
-        if initial(i)*Eminus < Emin
-            Elow=Emin;
-        else
-            Elow=initial(i)*Eminus;
-        end
-        %The bounding vectors are built differently depending on what 
-        %(from phase and m terms) are fixed. If phase is fixed, theta1 is 
-        %the only phase parameter, which is used in each function call, but 
-        %only appears in the first set of concatenations. 
-        if strcmp(p.Results.couplePhase, 'true') && i > 1
-            start=horzcat(start, initial(i), gammastart, Cstart);
-            upper=horzcat(upper, Eup, gammaup, Cup);
-            lower=horzcat(lower, Elow, gammalow, Clow);
-        else
-            start=horzcat(start, initial(i), gammastart, thetastart,...
-                Cstart);
-            upper=horzcat(upper, Eup, gammaup, thetaup, Cup);
-            lower=horzcat(lower, Elow, gammalow, thetalow, Clow);
+    for i=1:cLength
+        switchparam = char(myCoeff(i));
+        switch switchparam(1:end-2)
+            case 'EnF'
+                %First check to make sure the generatated bounds on the 
+                %guesses of energy are inside the data, if not set to just 
+                %inside the data range.
+                if initial(initialIndex)*EnFplus > EnFmax
+                    EnFup=EnFmax;
+                else
+                    EnFup=initial(initialIndex)*EnFplus;
+                end
+                if initial(initialIndex)*EnFminus < EnFmin
+                    EnFlow=EnFmin;
+                else
+                    EnFlow=initial(initialIndex)*EnFminus;
+                end
+                start(i)=initial(initialIndex);
+                upper(i)=EnFup;
+                lower(i)=EnFlow;
+                initialIndex = initialIndex + 1;
+            case 'gammaF'
+                start(i)=gammaFstart;
+                upper(i)=gammaFup;
+                lower(i)=gammaFlow;
+            case 'thetaF'
+                start(i)=thetaFstart;
+                upper(i)=thetaFup;
+                lower(i)=thetaFlow;
+            case 'AF'
+                start(i)=AFstart;
+                upper(i)=AFup;
+                lower(i)=AFlow;
         end
     end
 end

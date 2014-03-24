@@ -1,4 +1,4 @@
-function y=prFDFF(E,En,gamma,theta,C)
+function f=prFDFF(E,En,gamma,theta,A)
 % prFDFF returns the first-derivative Gaussian lineshape for confined
 % carrier photoreflectance:
 %   Inputs:
@@ -6,9 +6,9 @@ function y=prFDFF(E,En,gamma,theta,C)
 %       En: Oscillator energy [eV] {scalar expected}
 %    gamma: Broadning factor [eV] {scalar expected}
 %    theta: Phase term [radians] {scalar expected}
-%        C: Amplitude factor [unitless] {scalar expected}
+%        A: Amplitude factor [unitless] {scalar expected}
 %   Outputs:
-%        y: Output delR/R [proportinal to J^3] {vector}
+%        f: Output delR/R [proportinal to J^3] {vector}
 %
 %   The formula is taken from eq. 7a, page 3810 of [1].
 %
@@ -27,12 +27,12 @@ function y=prFDFF(E,En,gamma,theta,C)
 %  it under the terms of the GNU General Public License v3.
 
     % Begin with equation 6b [1].
-    yj=(E-En)./gamma; 
+    a0=(E-En)./gamma; 
     % Compute eq. 3d [1], psi(1, 1/2, -y^2/2), the confluent hypergeometric 
     % function (see comments in chfPR.m).
-    a1=chfPR(yj);
+    a1=chfPR(a0);
     % Then: eq. 3e [1].
-    a2=-(pi/2)^(1/2).*yj.*exp(-(yj.^2./2));
+    a2=-(pi/2)^(1/2).*a0.*exp(-(a0.^2./2));
     % Finally, compute one element j of eq. 7a [1].
-    y=C.*(sin(theta).*a1+cos(theta).*a2);
+    f=A.*(sin(theta).*a1+cos(theta).*a2);
 end

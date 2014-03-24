@@ -36,8 +36,8 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
     myFitType=fittype(myEq, 'dependent',{'y'},'independent',{'x'},...
     'coefficients', myCoeff);
 
-    [start,upper,lower]=prTDFFFitSetup(x,initial, 'couplePhase',...
-        p.Results.couplePhase, 'fixM', p.Results.fixM);
+    [start,upper,lower]=prTDFFFitSetup(x,initial, myCoeff,...
+        'couplePhase', p.Results.couplePhase, 'fixM', p.Results.fixM);
 
     [myFit,myGof]=fit(x,y,myFitType,'StartPoint', start, 'Upper', upper,...
         'Lower', lower, 'MaxFunEvals', 5000, 'MaxIter', 5000,...
@@ -51,68 +51,49 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
         myPlot=plot(myFit,'k',x,y);
         set(myPlot,'LineWidth', 3);
         fitCoeff=coeffvalues(myFit);
-        if strcmp(p.Results.fixM, 'true')
-            mj=2.5;
-            for j=1:n
-                if strcmp(p.Results.couplePhase, 'true')
-                   thetaj(j)=fitCoeff(4);
-                   if j == 1
-                       Egj(j)=fitCoeff(1);
-                       gammaj(j)=fitCoeff(2);
-                       hOj(j)=fitCoeff(3);
-                       Aj(j)=fitCoeff(5);
-                   else
-                       offset=5+(j-2)*4;
-                       Egj(j)=fitCoeff(offset+1);
-                       gammaj(j)=fitCoeff(offset+2);
-                       hOj(j)=fitCoeff(offset+3);
-                       Aj(j)=fitCoeff(offset+4);
-                   end
-                else
-                    offset=(j-1)*5;
-                    Egj(j)=fitCoeff(offset+1);
-                    gammaj(j)=fitCoeff(offset+2);
-                    hOj(j)=fitCoeff(offset+3);
-                    thetaj(j)=fitCoeff(offset+4);
-                    Aj(j)=fitCoeff(offset+5);
-                end
-                myTDFF(:,j)=prTDFF(x, Egj(j), gammaj(j), hOj(j),...
-                    thetaj(j), mj, Aj(j));
-            end
-        else
-            for j=1:n
-                if strcmp(p.Results.couplePhase, 'true')
-                    thetaj(j)=fitCoeff(4);
-                    if j == 1
-                        Egj(j)=fitCoeff(1);
-                        gammaj(j)=fitCoeff(2);
-                        hOj(j)=fitCoeff(3);
-                        mj(j)=fitCoeff(5);
-                        Aj(j)=fitCoeff(6);
-                    else
-                        offset=6+(j-2)*5;
-                        Egj(j)=fitCoeff(offset+1);
-                        gammaj(j)=fitCoeff(offset+2);
-                        hOj(j)=fitCoeff(offset+3);
-                        mj(j)=fitCoeff(offset+4);
-                        Aj(j)=fitCoeff(offset+5);
-                    end
-                else
-                    offset=(j-1)*6;
-                    Egj(j)=fitCoeff(offset+1);
-                    gammaj(j)=fitCoeff(offset+2);
-                    hOj(j)=fitCoeff(offset+3);
-                    thetaj(j)=fitCoeff(offset+4);
-                    mj(j)=fitCoeff(offset+5);
-                    Aj(j)=fitCoeff(offset+6);
-                end
-                myTDFF(:,j)=prTDFF(x, Egj(j), gammaj(j), hOj(j),...
-                    thetaj(j), mj(j), Aj(j));
-            end
-        end
-        hold on
-        plot(x,myTDFF, 'linewidth', 1);
-        hold off
+        fitCoeffNames=coeffnames(myFit);
+        T_iter=1;
+         for j=1:n
+             %f=prTDFF(x,Eg,gamma,hO,theta,m,A)
+             myName=strcat('EnT',num2str(T_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myEnT=fitCoeff(boolIndex);
+
+             myName=strcat('gammaT',num2str(T_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myGammaT=fitCoeff(boolIndex);
+
+             myName=strcat('hOT',num2str(T_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myHOT=fitCoeff(boolIndex);
+
+             if strcmp(p.Results.couplePhase, 'true')
+                 myName='thetaT00';
+             else
+                 myName=strcat('thetaT',num2str(T_iter,'%02d'));
+             end
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myThetaT=fitCoeff(boolIndex);
+
+             if strcmp(p.Results.fixM, 'true')
+                myMT=2.5;
+             else
+                myName=strcat('mT',num2str(T_iter,'%02d'));
+                boolIndex = strcmp(myName, fitCoeffNames);
+                myMT=fitCoeff(boolIndex);
+             end
+
+             myName=strcat('AT',num2str(T_iter,'%02d'));
+             boolIndex = strcmp(myName, fitCoeffNames);
+             myAT=fitCoeff(boolIndex);
+
+             myTDFF(:,T_iter)=prTDFF(x, myEnT, myGammaT,...
+                 myHOT, myThetaT, myMT, myAT);
+             T_iter = T_iter + 1;
+         end
+         hold on
+         plot(x,myTDFF, 'linewidth', 1);
+         hold off
     end
 end
 

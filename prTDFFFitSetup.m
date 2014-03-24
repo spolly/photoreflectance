@@ -1,9 +1,12 @@
-function [start, upper, lower]=prTDFFFitSetup(x,initial,varargin)
+function [start, upper, lower]=prTDFFFitSetup(x,initial, myCoeff, varargin)
 % prTDFFFitSetup returns vectors describing initial conditions, as well as 
 % upper and lower bounds for the fitting function.
 %   Inputs:
 %       x: x-values of experimental data [eV] {vector expected}
-%       n: Number of oscillators to use [unitless] {scalar expected}
+%       initial: Estimates of oscillator energy [eV]
+%                   {scalar or vector expected}
+%       myCoeff: Names of coefficients used in the equation, as output by
+%                   prTDFFn.m
 %   Optional Inputs:
 %       'couplePhase': 'false': (default) allows independent phase term  
 %                               fits for each  oscillator. 
@@ -25,86 +28,79 @@ function [start, upper, lower]=prTDFFFitSetup(x,initial,varargin)
     addOptional(p,'fixM','true');
     parse(p,varargin{:});
 
-    n=length(initial);
-
     erange=0.15;        %Value erange determines percentage change allowed    
-    Eplus=1+erange;     %via bounds for energy. E.g. 0.15 means 15% higher   
-    Eminus=1-erange;    %or lower than the input guess.
-    Emax=max(x)*0.999;
-    Emin=min(x)*1.001;
+    EnTplus=1+erange;     %via bounds for energy. E.g. 0.15 means 15% higher   
+    EnTminus=1-erange;    %or lower than the input guess.
+    EnTmax=max(x)*0.999;
+    EnTmin=min(x)*1.001;
 
-    gammastart=0.005;   %Broading factor
-    gammaup=0.1;
-    gammalow=0.0001;
+    gammaTstart=0.005;   %Broading factor
+    gammaTup=0.1;
+    gammaTlow=0.0001;
 
-    hOstart=0.01;       %Electro-optical factor
-    hOup=1;             %dependents include E-field 
-    hOlow=0.00001;      %and interband effective mass
+    hOTstart=0.01;       %Electro-optical factor
+    hOTup=1;             %dependents include E-field 
+    hOTlow=0.00001;      %and interband effective mass
 
-    thetastart=0;       %Phase factor
-    thetaup=pi;
-    thetalow=-pi;
+    thetaTstart=0;       %Phase factor
+    thetaTup=pi;
+    thetaTlow=-pi;
 
-    mstart=2.5;         %Exponent factor.
-    mup=4;              %m=2.5: 3D critical point
-    mlow=2;             %m=3: 2D critical point
+    mTstart=2.5;         %Exponent factor.
+    mTup=4;              %m=2.5: 3D critical point
+    mTlow=2;             %m=3: 2D critical point
 
-    Astart=0.001;       %Amplitude factor
-    Aup=1e-2;
-    Alow=1e-6;
+    ATstart=0.001;       %Amplitude factor
+    ATup=1e-2;
+    ATlow=1e-6;
 
-    start=[];
-    upper=[];
-    lower=[];
-
-    for i=1:n
-        %First check to make sure the generatated bounds on the guesses of
-        %energy are inside the data, if not set to just inside the data
-        %range.
-        if initial(i)*Eplus > Emax
-            Eup=Emax;
-        else
-            Eup=initial(i)*Eplus;
-        end
-        if initial(i)*Eminus < Emin
-            Elow=Emin;
-        else
-            Elow=initial(i)*Eminus;
-        end
-        %The bounding vectors are built differently depending on what 
-        %(from phase and m terms) are fixed. If phase is fixed, theta1 is 
-        %the only phase parameter, which is used in each function call, but 
-        %only appears in the first set of concatenations. If m is fixed, it  
-        %is simply set to 2.5 and not included as a parameter at all.
-        if strcmp(p.Results.fixM, 'true')
-            if strcmp(p.Results.couplePhase, 'true') && i > 1
-                start=horzcat(start, initial(i), gammastart, hOstart,...
-                    Astart);
-                upper=horzcat(upper, Eup, gammaup, hOup, Aup);
-                lower=horzcat(lower, Elow, gammalow, hOlow, Alow);
-            else
-                start=horzcat(start, initial(i), gammastart, hOstart,...
-                    thetastart, Astart);
-                upper=horzcat(upper, Eup, gammaup, hOup, thetaup,...
-                     Aup);
-                lower=horzcat(lower, Elow, gammalow, hOlow,...
-                    thetalow, Alow);
-            end
-        else
-            if strcmp(p.Results.couplePhase, 'true') && i > 1
-                start=horzcat(start, initial(i), gammastart, hOstart,...
-                    mstart, Astart);
-                upper=horzcat(upper, Eup, gammaup, hOup, mup, Aup);
-                lower=horzcat(lower, Elow, gammalow, hOlow, mlow,...
-                    Alow);
-            else
-                start=horzcat(start, initial(i), gammastart, hOstart,...
-                    thetastart, mstart, Astart);
-                upper=horzcat(upper, Eup, gammaup, hOup, thetaup,...
-                    mup, Aup);
-                lower=horzcat(lower, Elow, gammalow, hOlow, thetalow,...
-                    mlow, Alow);
-            end
+    cLength=length(myCoeff);
+    start(cLength)=zeros;
+    upper(cLength)=zeros;
+    lower(cLength)=zeros;
+    initialIndex = 1;
+    for i=1:cLength
+        switchparam = char(myCoeff(i));
+        %nparam=str2num(switchparam(end-1:end));
+        switch switchparam(1:end-2)
+            case 'EnT'
+                %First check to make sure the generatated bounds on the 
+                %guesses of energy are inside the data, if not set to just 
+                %inside the data range.
+                if initial(initialIndex)*EnTplus > EnTmax
+                    EnTup=EnTmax;
+                else
+                    EnTup=initial(initialIndex)*EnTplus;
+                end
+                if initial(initialIndex)*EnTminus < EnTmin
+                    EnTlow=EnTmin;
+                else
+                    EnTlow=initial(initialIndex)*EnTminus;
+                end
+                start(i)=initial(initialIndex);
+                upper(i)=EnTup;
+                lower(i)=EnTlow;
+                initialIndex = initialIndex + 1;
+            case 'gammaT'
+                start(i)=gammaTstart;
+                upper(i)=gammaTup;
+                lower(i)=gammaTlow;
+            case 'hOT'
+                start(i)=hOTstart;
+                upper(i)=hOTup;
+                lower(i)=hOTlow;
+            case 'thetaT'
+                start(i)=thetaTstart;
+                upper(i)=thetaTup;
+                lower(i)=thetaTlow;
+            case 'mT'
+                start(i)=mTstart;
+                upper(i)=mTup;
+                lower(i)=mTlow;
+            case 'AT'
+                start(i)=ATstart;
+                upper(i)=ATup;
+                lower(i)=ATlow;
         end
     end
 end
