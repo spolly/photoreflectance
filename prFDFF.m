@@ -30,7 +30,7 @@ function f=prFDFF(E,En,gamma,theta,A)
     a0=(E-En)./gamma; 
     % Compute eq. 3d [1], psi(1, 1/2, -y^2/2), the confluent hypergeometric 
     % function (see comments in chfPR.m).
-    a1=chfPR(a0);
+    a1=prCHF(a0);
     % Then: eq. 3e [1].
     a2=-(pi/2)^(1/2).*a0.*exp(-(a0.^2./2));
     % Finally, compute one element j of eq. 7a [1].
