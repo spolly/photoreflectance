@@ -20,6 +20,9 @@ function f=prTDFF(x,Eg,gamma,hO,theta,m,A)
 %  bulk/thin film, microstructures, surfaces/interfaces and devices,"
 %  Materials Science and Engineering: R: Reports, vol. 10, no. 7-8, 
 %  pp. xv-374, Oct. 1993. DOI: 10.1016/0927-796X(93)90004-M
+%
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance.
 % 
 %  Copyright 2014, Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify

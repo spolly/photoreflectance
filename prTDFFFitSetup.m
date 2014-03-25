@@ -18,6 +18,9 @@ function [start, upper, lower]=prTDFFFitSetup(x,initial, myCoeff, varargin)
 %       start: Starting point of all parameters [various] {vector}
 %       upper: Upper bounds of all parameters [various] {vector}
 %       lower: Lower bounds of all parameters [various] {vector}
+%
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance.
 % 
 %  Copyright 2014 Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify

@@ -15,7 +15,8 @@ function [myFit,myGof]=prFDFFFit(x,y,initial,varargin)
 %       myFit: MATLAB fit [various] {cfit}
 %       myGof: MATLAB goodness of fit [various] {struct}
 %
-%  This was written in MATLAB R2013a, and requires the free/open-source 
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance. It requires the free/open-source 
 %  C++ version of erfi(): Faddeeva_erfi(), written by S. G. Johnson, which 
 %  can be found, along with instructions on compiling, at:
 %  http://ab-initio.mit.edu/Faddeeva
@@ -56,7 +57,6 @@ function [myFit,myGof]=prFDFFFit(x,y,initial,varargin)
         F_iter=1;
         myFDFF=zeros(length(x), n);
         for j=1:n
-             %f=prFDFF(E,En,gamma,theta,A)
              myName=strcat('EnF',num2str(F_iter,'%02d'));
              boolIndex = strcmp(myName, fitCoeffNames);
              myEnF=fitCoeff(boolIndex);

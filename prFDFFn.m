@@ -10,6 +10,9 @@ function [myEq,myCoeff]=prFDFFn(n,varargin)
 %   Outputs:
 %       myEq: Equation to use in building a fittype {string}
 %       myCoeff: List of parameter names used in myEq {vector}
+%
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance.
 % 
 %  Copyright 2014 Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify

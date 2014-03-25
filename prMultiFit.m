@@ -25,9 +25,10 @@ function [myFit,myGof]=prMultiFit(x,y,initial,type,varargin)
 %   Example:
 %       initial = [1.1, 1.3, 1.42]; %Three oscillators, at these energies
 %       type = [1, 1, 3]; %The first two will use prFDFF, the third, prTDFF
-%       [testFit,testGof]=prMultiFit(x,y,initial,type)      
+%       [testFit,testGof]=prMultiFit(x,y,initial,type) %Perform fit      
 %
-%  This was written in MATLAB R2013a, and requires the free/open-source 
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance. It requires the free/open-source 
 %  C++ version of erfi(): Faddeeva_erfi(), written by S. G. Johnson, which 
 %  can be found, along with instructions on compiling, at:
 %  http://ab-initio.mit.edu/Faddeeva

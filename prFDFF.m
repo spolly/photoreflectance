@@ -8,7 +8,7 @@ function f=prFDFF(E,En,gamma,theta,A)
 %    theta: Phase term [radians] {scalar expected}
 %        A: Amplitude factor [unitless] {scalar expected}
 %   Outputs:
-%        f: Output delR/R [proportinal to J^3] {vector}
+%        f: Output delR/R [proportinal to eV^3] {vector}
 %
 %   The formula is taken from eq. 7a, page 3810 of [1].
 %
@@ -21,6 +21,9 @@ function f=prFDFF(E,En,gamma,theta,A)
 %  “Electroreflectance study of a symmetrically coupled GaAs/Ga0.77Al0.23As 
 %  double quantum well system,” Journal of Applied Physics, vol. 70, no. 7,
 %  p. 3808, 10/1/1991 1991. DOI: 10.1063/1.349184
+%
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance.
 % 
 %  Copyright 2014 Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify
@@ -28,7 +31,7 @@ function f=prFDFF(E,En,gamma,theta,A)
 
     % Begin with equation 6b [1].
     a0=(E-En)./gamma; 
-    % Compute eq. 3d [1], psi(1, 1/2, -y^2/2), the confluent hypergeometric 
+    % Compute eq. 3d [1], psi(1, 1/2, -x^2/2), the confluent hypergeometric 
     % function (see comments in chfPR.m).
     a1=prCHF(a0);
     % Then: eq. 3e [1].

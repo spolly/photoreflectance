@@ -17,6 +17,9 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
 %   Outputs:
 %       myFit: MATLAB fit output [various] {cfit}
 %       myGof: MATLAB goodness of fit output [various] {struct}
+%
+%  This function file was written in MATLAB R2013a, and is part of the
+%  project: photoreflectance.
 % 
 %  Copyright 2014 Stephen J. Polly, RIT
 %  This program is free software: you can redistribute it and/or modify
