@@ -88,7 +88,7 @@ Then calculate the corresponding PR signal with a call to `prFDFF.m`. In this ex
 * A = 1e-4
 
 ```matlab
-PR = prFDFF(E, 1.21, 0.01, 1e-4);
+PR = prFDFF(E, 1.21, 0.01, 0, 1e-4);
 ```
 
 Which is then plotted:
@@ -180,7 +180,7 @@ Import experimental data to MATLAB. In this example, x-data is 'E' and y-data is
 Make a vector of educated guesses of where the oscillators lie:
 
 ```matlab
-initial = [[1.1, 1.16, 1.23, 1.37, 1.42];
+initial = [1.1, 1.16, 1.23, 1.37, 1.42];
 ```
 
 Next, define an oscillator type for each of those energies:
