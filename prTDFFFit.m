@@ -57,7 +57,7 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
         fitCoeffNames=coeffnames(myFit);
         T_iter=1;
          for j=1:n
-             %f=prTDFF(x,Eg,gamma,hO,theta,m,A)
+             %f=prTDFF(x,Eg,gamma,theta,m,A)
              myName=strcat('EnT',num2str(T_iter,'%02d'));
              boolIndex = strcmp(myName, fitCoeffNames);
              myEnT=fitCoeff(boolIndex);
@@ -65,10 +65,6 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
              myName=strcat('gammaT',num2str(T_iter,'%02d'));
              boolIndex = strcmp(myName, fitCoeffNames);
              myGammaT=fitCoeff(boolIndex);
-
-             myName=strcat('hOT',num2str(T_iter,'%02d'));
-             boolIndex = strcmp(myName, fitCoeffNames);
-             myHOT=fitCoeff(boolIndex);
 
              if strcmp(p.Results.couplePhase, 'true')
                  myName='thetaT00';
@@ -91,7 +87,7 @@ function [myFit,myGof]=prTDFFFit(x,y,initial,varargin)
              myAT=fitCoeff(boolIndex);
 
              myTDFF(:,T_iter)=prTDFF(x, myEnT, myGammaT,...
-                 myHOT, myThetaT, myMT, myAT);
+                 myThetaT, myMT, myAT);
              T_iter = T_iter + 1;
          end
          hold on

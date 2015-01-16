@@ -34,16 +34,12 @@ function [start, upper, lower]=prTDFFFitSetup(x,initial, myCoeff, varargin)
     erange=0.15;        %Value erange determines percentage change allowed    
     EnTplus=1+erange;     %via bounds for energy. E.g. 0.15 means 15% higher   
     EnTminus=1-erange;    %or lower than the input guess.
-    EnTmax=max(x)*0.999;
-    EnTmin=min(x)*1.001;
+    EnTmax=max(x)*1.02;
+    EnTmin=min(x)*0.98;
 
     gammaTstart=0.005;   %Broading factor
-    gammaTup=0.1;
+    gammaTup=1.0;
     gammaTlow=0.0001;
-
-    hOTstart=0.01;       %Electro-optical factor
-    hOTup=1;             %dependents include E-field 
-    hOTlow=0.00001;      %and interband effective mass
 
     thetaTstart=0;       %Phase factor
     thetaTup=pi;
@@ -88,10 +84,6 @@ function [start, upper, lower]=prTDFFFitSetup(x,initial, myCoeff, varargin)
                 start(i)=gammaTstart;
                 upper(i)=gammaTup;
                 lower(i)=gammaTlow;
-            case 'hOT'
-                start(i)=hOTstart;
-                upper(i)=hOTup;
-                lower(i)=hOTlow;
             case 'thetaT'
                 start(i)=thetaTstart;
                 upper(i)=thetaTup;
