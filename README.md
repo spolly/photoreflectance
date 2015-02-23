@@ -11,6 +11,8 @@ it under the terms of the GNU General Public License v3.
 
 Dependencies
 --------------
+This project requires the Curve Fitting Toolbox in MATLAB.
+
 Parts of this project require the free/open-source  C++ version of the imaginary error function
 `Faddeeva_erfi()`, written by S. G. Johnson, which can be found, along with instructions on compiling in MATLAB, at:  
 http://ab-initio.mit.edu/Faddeeva

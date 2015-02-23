@@ -1,4 +1,4 @@
-function [myFit,myGof]=prMultiFit(x,y,initial,type,varargin)
+function [myFit,myGof,myTDFF,myFDFF]=prMultiFit(x,y,initial,type,varargin)
 % prMultiFit returns a fit and a gof against the input x and y data, using 
 % the sum of n oscillators defined by either prFDFF or prTDFF depending on 
 % the contentes of the 'type' vector.

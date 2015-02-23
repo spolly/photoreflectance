@@ -29,54 +29,52 @@ function [start, upper, lower] = prMultiFitSetup(x,initial,myCoeff,...
     addOptional(p,'fixM','true');
     parse(p,varargin{:});
 
-    n=length(initial);
-
     % Ranges for prFDFF parameters
-    erangeF=0.10;        %Value erange determines percentage change allowed    
+    erangeF=0.05;        %Value erange determines percentage change allowed    
     EnFplus=1+erangeF;     %via bounds for energy. E.g. 0.15 means 15% higher   
     EnFminus=1-erangeF;    %or lower than the input guess.
     EnFmax=max(x)*0.999;
     EnFmin=min(x)*1.001;
 
-    gammaFstart=0.05;
-    gammaFup=1;
-    gammaFlow=0.0001;
+    gammaFstart=5e-3;
+    gammaFup=1e-1;
+    gammaFlow=1e-4;
 
     thetaFstart=0;
     thetaFup=2*pi;
     thetaFlow=-2*pi;
 
-    AFstart=0.001;
-    AFup=.01;
-    AFlow=.0000001;
+    AFstart=1e-3;
+    AFup=1e-2;
+    AFlow=1e-7;
     % End of ranges for prFDFF parameters
     
     % Ranges for prTDFF parameters
-    erangeT=0.2;        %Value erange determines percentage change allowed    
-    EnTplus=1+erangeT;     %via bounds for energy. E.g. 0.15 means 15% higher   
-    EnTminus=1-erangeT;    %or lower than the input guess.
+    erangeT=0.02;         %Value erange determines percentage change allowed    
+    EnTplus=1+erangeT;   %via bounds for energy. E.g. 0.15 means 15% higher   
+    EnTminus=1-erangeT;  %or lower than the input guess.
     EnTmax=max(x)*0.999;
     EnTmin=min(x)*1.001;
 
-    gammaTstart=0.05;   %Broading factor
+    gammaTstart=0.005;
     gammaTup=1;
-    gammaTlow=0.0001;
+    gammaTlow=0.00001;
 
-    hOTstart=0.01;       %Electro-optical factor
-    hOTup=1;             %dependents include E-field 
-    hOTlow=0.00001;      %and interband effective mass
+    hOTstart=.01;       %Electro-optical factor
+    hOTup=1;           %dependents include E-field 
+    hOTlow=.00001;         %and interband effective mass
 
     thetaTstart=0;       %Phase factor
-    thetaTup=pi;
-    thetaTlow=-pi;
+    thetaTup=2*pi;
+    thetaTlow=-2*pi;
 
     mTstart=2.5;         %Exponent factor.
     mTup=4;              %m=2.5: 3D critical point
     mTlow=2;             %m=3: 2D critical point
 
-    ATstart=0.001;       %Amplitude factor
-    ATup=1e-2;
-    ATlow=1e-7;
+    ATstart=0.001;
+    ATup=.01;
+    ATlow=.0000001;
     % End of ranges for prTDFF parameters
     
     
