@@ -40,7 +40,6 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
         else
             nx=num2str(p.Results.iteration,'%02d');
         end
-        hOTx=strcat('hOT',nx);
         ATx=strcat('AT',nx);
         EnTx=strcat('EnT',nx);
         gammaTx=strcat('gammaT',nx);
@@ -55,7 +54,7 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
              if strcmp(p.Results.couplePhase, 'true') && (i > 1 ... 
                 || (p.Results.iteration > 1))
                 thetaTx='thetaT00';
-                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, ATx});
+                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, ATx});
              else
                 if strcmp(p.Results.couplePhase, 'true')...
                     && (p.Results.iteration <= 1)
@@ -63,7 +62,7 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
                 else
                     thetaTx=strcat('thetaT',nx);
                 end
-                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, thetaTx,...
+                myCoeff=horzcat(myCoeff, {EnTx, gammaTx, thetaTx,...
                     ATx});
             end
         else
@@ -71,7 +70,7 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
             if strcmp(p.Results.couplePhase, 'true') && (i > 1 ... 
                 || (p.Results.iteration > 1))
               thetaTx='thetaT00';
-              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, mTx, ATx});
+              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, mTx, ATx});
             else
                 if strcmp(p.Results.couplePhase, 'true')...
                     && (p.Results.iteration <= 1)
@@ -79,11 +78,11 @@ function [myEq,myCoeff]=prTDFFn(n,varargin)
                 else
                     thetaTx=strcat('thetaT',nx);
                 end
-              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, hOTx, thetaTx,...
+              myCoeff=horzcat(myCoeff, {EnTx, gammaTx, thetaTx,...
                   mTx, ATx});
             end
         end
-        myEq=strcat(myEq, 'prTDFF(x,', EnTx, ',', gammaTx, ',', hOTx,...
+        myEq=strcat(myEq, 'prTDFF(x,', EnTx, ',', gammaTx,...
             ',', thetaTx, ',', mTx, ',', ATx, ') +'); 
     end
     %remove trailing ' +'

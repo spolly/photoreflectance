@@ -1,4 +1,4 @@
-function f=prTDFF(x,Eg,gamma,hO,theta,m,A)
+function f=prTDFF(x,Eg,gamma,theta,m,A)
 % prTDFF returns the calculated low-field deltaR/R based on several inputs.
 %   Inputs:
 %        x: Energy [eV] {vector expected}
@@ -28,6 +28,6 @@ function f=prTDFF(x,Eg,gamma,hO,theta,m,A)
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License v3.
 %
-    f=((hO).^3).*real(A.*exp(1i.*theta).*(x-Eg+1i.*gamma).^-m);
+    f=real(A.*exp(1i.*theta).*(x-Eg+1i.*gamma).^-m);
 end
 
