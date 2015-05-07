@@ -5,9 +5,13 @@ Functions for extracting parameters from photoreflectance data.
 
 These files were created in MATLAB R2013a.
 
-Copyright 2014 Stephen J. Polly, RIT  
+Copyright 2014-2015 Stephen J. Polly, RIT  
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License v3.
+
+Acknowledgement
+--------------
+This work was supported in part by the National Science Foundation under Grant DMR-0955752, and the US Department of Education GAANN Fellowship P200A090225.
 
 Dependencies
 --------------
